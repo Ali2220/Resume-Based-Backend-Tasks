@@ -1,0 +1,77 @@
+🔥 Task 1: Real-Time Chat Backend (Design + Code)
+🧠 Problem Statement
+
+You are building a real-time chat system (similar to Flux).
+
+Users can:
+
+Join chat rooms
+
+Send messages
+
+Fetch previous messages when joining
+
+This is backend only.
+
+🛠 Requirements
+1️⃣ Design MongoDB Schemas
+
+Create Mongoose schemas for:
+
+User
+
+ChatRoom
+
+Message
+
+Minimum fields:
+
+Message must belong to:
+
+a user
+
+a room
+
+Messages should be fetchable room-wise
+
+System should scale to thousands of messages
+
+2️⃣ API Endpoints (REST)
+
+Design endpoints for:
+
+Create chat room
+
+Send message
+
+Fetch last 50 messages of a room (pagination ready)
+
+3️⃣ One Real-Time Question (Very Important)
+
+Answer this clearly:
+
+👉 Why do we still need REST APIs when we already have Socket.IO for chat?
+
+⏱ Time Limit
+
+15 minutes
+
+✅ Expected Outcome
+
+Proper schema relationships (ref)
+
+Scalable thinking (no embedding 10k messages in one doc)
+
+Clean endpoint design
+
+Clear explanation (not essay)
+
+🧾 What I Want in Your Reply
+
+Reply with:
+
+User, ChatRoom, Message schemas
+
+REST API routes (just route + purpose, full code not required)
+
+Short answer to Socket.IO vs REST question (4–5 lines max)
