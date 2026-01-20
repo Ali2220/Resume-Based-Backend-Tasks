@@ -75,3 +75,62 @@ User, ChatRoom, Message schemas
 REST API routes (just route + purpose, full code not required)
 
 Short answer to Socket.IO vs REST question (4–5 lines max)
+===========================================================
+
+TASK 2: Design a Rate Limiting Middleware
+⏱️ Time Limit: 15 minutes
+Problem Statement:
+You're building an API for a chat application (similar to your Flux project). You need to implement a rate limiting middleware to prevent abuse.
+Requirements:
+
+Limit each user to 5 requests per minute to the /api/chat endpoint
+Use an in-memory approach (no Redis for this task - keep it simple)
+Return appropriate HTTP status code and error message when limit is exceeded
+The middleware should track requests by user ID (assume req.userId is available from authentication middleware)
+
+Expected Outcome:
+Write the middleware function in JavaScript/Node.js. Your solution should:
+
+Track request counts per user
+Reset counts after 1 minute
+Block excessive requests with proper error response
+Allow requests to continue if under the limit
+===============================================================
+
+TASK 3: Database Schema Design & Query Optimization
+⏱️ Time Limit: 20 minutes
+Problem Statement:
+You're building a messaging system similar to Slack where:
+
+Users can join multiple workspaces
+Each workspace has multiple channels
+Users can send messages in channels
+Messages can be threaded (replies to other messages)
+You need to support @mentions of users in messages
+
+Requirements:
+Part A: Schema Design (10 minutes)
+Design MongoDB schemas for this system. Include:
+
+User schema
+Workspace schema
+Channel schema
+Message schema
+
+Consider:
+
+Relationships between collections (embedded vs referenced)
+Indexes for performance
+Fields needed for common queries
+
+Part B: Query Problem (10 minutes)
+Write a MongoDB query (using Mongoose) to:
+"Fetch the last 50 messages from a specific channel, including:
+
+Message content and timestamp
+Sender's name and avatar
+If it's a reply, include the parent message content
+List of mentioned users' names
+Sort by newest first"
+
+This query should be optimized - explain what indexes you'd create and why.

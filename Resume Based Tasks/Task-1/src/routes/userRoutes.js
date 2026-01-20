@@ -8,15 +8,15 @@ const jwt = require('jsonwebtoken')
 // I dont use much validation, and i dont use bcrytjs 
 router.post("/register", async (req, res) => {
   try {
-    const { name, email, password } = req.body;
-    if (!name || !email || !password) {
+    const { name, email, avatar } = req.body;
+    if (!name || !email || !avatar) {
       return res.status(400).json({ message: "Please provide all info." });
     }
 
     const newUser = await User.create({
       name,
       email,
-      password
+      avatar
     });
 
     const token = jwt.sign({id: newUser._id}, 'shh')

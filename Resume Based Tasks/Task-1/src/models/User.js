@@ -10,10 +10,11 @@ const userSchema = new mongoose.Schema({
     unique: true,
     required: true,
   },
-  password: {
+  avatar: {
     type: String,
-    required: true,
   },
 });
+
+userSchema.index({email: 1})
 
 module.exports = mongoose.model("User", userSchema);

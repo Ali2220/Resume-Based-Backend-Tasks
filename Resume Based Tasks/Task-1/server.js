@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser')
 const roomRoutes = require("./src/routes/roomRoutes");
 const userRoutes = require("./src/routes/userRoutes");
 const messageRoutes = require("./src/routes/messageRoutes");
+const slackRoutes = require('./src/routes/slack')
 connectDB();
 
 const app = express();
@@ -24,6 +25,7 @@ const io = new Server(server);
 app.use("/api/room", roomRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/message", messageRoutes);
+app.use("/api/slack", slackRoutes);
 
 // SOCKET.IO
 // io.on("connection", (socket) => {

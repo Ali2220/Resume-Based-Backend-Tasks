@@ -4,9 +4,9 @@ const Message = require("../models/Message");
 const limit = require("../middlewares/rateLimitMiddleware");
 const authMiddleware = require("../middlewares/authMiddleware");
 
-router.post("/chat", authMiddleware, limit(), (req, res) => {
-  res.json({ message: "good" });
-});
+// router.post("/chat", authMiddleware, limit(), (req, res) => {
+//   res.json({ message: "good" });
+// });
 
 // async function getRecentMessages(userId) {
 //   const messages = await Message.find({ user: userId })
