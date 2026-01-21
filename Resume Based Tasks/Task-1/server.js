@@ -7,10 +7,10 @@ const { Server } = require("socket.io");
 // const mongoose = require("mongoose");
 const cookieParser = require('cookie-parser')
 // const roomRoutes = require("./src/routes/roomRoutes");
-// const userRoutes = require("./src/routes/userRoutes");
+const userRoutes = require("./src/routes/userRoutes");
 // const messageRoutes = require("./src/routes/messageRoutes");
 // const slackRoutes = require('./src/routes/slack')
-const fileUploadRoutes = require('./src/routes/fileUpload')
+// const fileUploadRoutes = require('./src/routes/fileUpload')
 const errorHandler = require('./src/middlewares/errorHandlerMiddleware')
 connectDB();
 
@@ -25,11 +25,11 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 // REST APIs
+app.use("/api/auth", userRoutes);
 // app.use("/api/room", roomRoutes);
-// app.use("/api/user", userRoutes);
 // app.use("/api/message", messageRoutes);
 // app.use("/api/slack", slackRoutes);
-app.use("/api/uploads", fileUploadRoutes);
+// app.use("/api/uploads", fileUploadRoutes);
 
 // SOCKET.IO
 // io.on("connection", (socket) => {

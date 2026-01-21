@@ -1,30 +1,78 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
-const Message = require("../models/Message");
-const mongoose = require("mongoose");
-const jwt = require('jsonwebtoken')
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+const { register, login } = require("../middlewares/validationMiddleware");
 
-// I dont use much validation, and i dont use bcrytjs 
-router.post("/register", async (req, res) => {
+// I dont use much validation, and i dont use bcrytjs
+router.post("/register", register, async (req, res) => {
   try {
-    const { name, email, avatar } = req.body;
-    if (!name || !email || !avatar) {
+    const { name, email, password } = req.body;
+    if (!name || !email || !password) {
       return res.status(400).json({ message: "Please provide all info." });
     }
+
+    const user = await User.findOne({ email });
+
+    if (user) {
+      return res.status(409).json({
+        message: "User already exists",
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await User.create({
       name,
       email,
-      avatar
+      password: hashedPassword,
     });
 
-    const token = jwt.sign({id: newUser._id}, 'shh')
-    res.cookie('token', token)
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET_KEY, {
+      expiresIn: "7d",
+    });
+    res.cookie("token", token);
 
     res.status(201).json({ newUser: newUser });
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+});
+
+router.post("/login", login, async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ message: "Please Provide Email and Password." });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const checkPassword = await bcrypt.compare(password, user.password);
+    console.log(checkPassword);
+
+    if (!checkPassword) {
+      return res
+        .status(401)
+        .json({ message: "Email or Password is incorrect" });
+    }
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, {
+      expiresIn: "7d",
+    });
+    res.cookie("token", token);
+
+    res.status(200).json({ message: "User loggedin Successfully" });
+  } catch (error) {
+    res.status(500).json({
+      error: error.message,
+    });
   }
 });
 
@@ -46,7 +94,6 @@ router.post("/register", async (req, res) => {
 //     }
 
 //     const newMessage = await shouldStoreInLongTerm(message, userId)
-    
 
 //     res.status(201).json({
 //       newMessage,

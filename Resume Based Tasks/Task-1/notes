@@ -134,3 +134,106 @@ List of mentioned users' names
 Sort by newest first"
 
 This query should be optimized - explain what indexes you'd create and why.
+=============================================================================
+
+TASK 4: Error Handling & API Design
+⏱️ Time Limit: 25 minutes
+Problem Statement:
+You're building a file upload API for a chat application where users can upload images/documents to channels. The API needs robust error handling and proper validation.
+Scenario:
+Users upload files to /api/upload endpoint. The file should be:
+
+Validated for type (only images: jpg, png, gif and documents: pdf, docx)
+Size limit: Max 5MB
+Uploaded to ImageKit CDN (like in your MoodyPlayer project)
+Metadata saved to MongoDB
+
+Requirements:
+Part A: Error Handling Middleware (10 minutes)
+Create a centralized error handling system:
+
+Custom Error Classes for different error types:
+
+ValidationError (400) - Invalid input
+AuthenticationError (401) - Not authenticated
+AuthorizationError (403) - Not authorized
+NotFoundError (404) - Resource not found
+FileUploadError (422) - File upload issues
+
+
+Global error handler middleware that:
+
+Catches all errors
+Formats consistent error responses
+Logs errors appropriately
+Handles both operational and programming errors
+Returns appropriate HTTP status codes
+
+
+
+Part B: File Upload Route with Validation (15 minutes)
+Create the /api/upload route that:
+
+Validates user is authenticated
+Validates file exists in request
+Validates file type (jpg, png, gif, pdf, docx only)
+Validates file size (max 5MB)
+Checks user has permission to upload to the channel
+Handles upload failures gracefully
+Returns proper success/error responses
+=======================================================================
+
+TASK 5: Authentication System & Security
+⏱️ Time Limit: 30 minutes
+Problem Statement:
+You're building a secure authentication system for your chat application. The system needs to handle user registration, login, token refresh, and proper security measures.
+
+Requirements:
+Part A: Secure Registration & Login (15 minutes)
+Create two endpoints:
+1. POST /api/auth/register
+
+Accept: email, password, name
+Validate email format and password strength (min 8 chars, 1 uppercase, 1 number)
+Hash password with bcrypt (salt rounds: 10)
+Check if user already exists
+Create user and return JWT token
+Token should expire in 7 days
+
+2. POST /api/auth/login
+
+Accept: email, password
+Verify credentials
+Return access token (15 min expiry) and refresh token (7 days)
+Store refresh token in database
+Set httpOnly cookies for tokens
+
+Part B: Token Refresh & Logout (10 minutes)
+3. POST /api/auth/refresh
+
+Accept refresh token from cookie
+Verify refresh token
+Issue new access token
+Return new access token
+
+4. POST /api/auth/logout
+
+Invalidate refresh token
+Clear cookies
+Return success message
+
+Part C: Security Questions (5 minutes)
+Answer these:
+
+Why should you use httpOnly cookies for tokens?
+What's the difference between access token and refresh token?
+How would you prevent brute force login attacks?
+
+
+Expected Outcome:
+Files to create:
+
+routes/authRoutes.js - All auth endpoints
+middlewares/authMiddleware.js - Updated secure middleware
+models/RefreshToken.js - Schema for refresh tokens
+utils/tokenUtils.js - JWT helper functions
