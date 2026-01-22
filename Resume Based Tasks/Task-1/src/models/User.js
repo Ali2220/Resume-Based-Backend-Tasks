@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  refreshToken: String
 });
 
 userSchema.index({email: 1})
