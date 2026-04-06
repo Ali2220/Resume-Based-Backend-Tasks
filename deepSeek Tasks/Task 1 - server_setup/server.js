@@ -1,17 +1,20 @@
-require("dotenv").config()
-const express = require('express')
-const app = express()
-const connectDB = require('./config/db')
+require("dotenv").config();
+const express = require("express");
+const app = express();
+const connectDB = require("./config/db");
+const authRoute = require("./routes/authRoute")
+const cookieParser = require("cookie-parser")
 
-connectDB()
+connectDB();
 
-app.get("/", (req, res) => {
-    return res.json({
-        message: 'Api is running'
-    })
-})
+// Middlewares
+app.use(express.json());
+app.use(cookieParser())
+
+// Routes
+app.use("/api/auth", authRoute)
+
 
 app.listen(5000, () => {
-    console.log('Server is running on port 5000');
-    
-})
+  console.log("Server is running on port 5000");
+});
