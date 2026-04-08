@@ -4,6 +4,7 @@ const app = express();
 const connectDB = require("./config/db");
 const authRoute = require("./routes/authRoute");
 const userRoute = require("./routes/userRoute")
+const productRoute = require("./routes/productRoute")
 const cookieParser = require("cookie-parser");
 
 connectDB();
@@ -15,6 +16,7 @@ app.use(cookieParser());
 // Routes
 app.use("/api/auth", authRoute);
 app.use("/api/user", userRoute);
+app.use("/api/product", productRoute);
 
 app.listen(5000, () => {
   console.log("Server is running on port 5000");
