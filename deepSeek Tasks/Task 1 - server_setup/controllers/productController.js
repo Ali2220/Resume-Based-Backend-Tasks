@@ -131,11 +131,99 @@ const deleteProduct = async (req, res) => {
       });
     }
 
-    await product.deleteOne()
+    await product.deleteOne();
 
     res.status(200).json({
       success: true,
       message: "Product Delete successfully",
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      error: "Internal Server Error",
+    });
+  }
+};
+
+const getAllProducts = async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    if (page < 1 || limit < 1) {
+      return res.status(400).json({
+        success: false,
+        error: "Page and limit cannot be negative",
+      });
+    }
+
+    let filter = {};
+
+    if (req.query.category) {
+      let allowedCategories = ["electronics", "clothing", "books", "other"];
+
+      if (allowedCategories.includes(req.query.category)) {
+        filter.category = req.query.category;
+      } else {
+        return res.status(400).json({
+          success: false,
+          error: "Invalid Category",
+        });
+      }
+    }
+
+    if (req.query.search) {
+      filter.name = {
+        $regex: req.query.search,
+        $options: "i",
+      };
+    }
+
+    let sort = {};
+    let sortBy = req.query.sort || "newest";
+
+    switch (sortBy) {
+      case "price_asc":
+        sort = { price: 1 };
+        break;
+      case "price_desc":
+        sort = { price: -1 };
+        break;
+      case "newest":
+        sort = { createdAt: -1 };
+        break;
+      case "oldest":
+        sort = { createdAt: 1 };
+        break;
+      default:
+        sort = { createdAt: -1 };
+    }
+
+    const products = await productModel
+      .find(filter)
+      .sort(sort)
+      .skip(skip)
+      .populate("user", "name email");
+
+    const total = await productModel.countDocuments(filter);
+
+    const totalPages = Math.ceil(total / limit);
+    const hasNext = page < totalPages;
+    const hasPrev = page > 1;
+
+    res.status(200).json({
+      success: true,
+      count: products.length,
+      pagination: {
+        total,
+        page,
+        pages: totalPages,
+        limit,
+        hasNext,
+        hasPrev,
+      },
+      data: products,
     });
   } catch (err) {
     res.status(500).json({
@@ -151,4 +239,5 @@ module.exports = {
   getProductById,
   updateProduct,
   deleteProduct,
+  getAllProducts,
 };
