@@ -22,6 +22,10 @@ const productSchema = mongoose.Schema({
         enum: ["electronics", "clothing", "books", "other"],
         default: "other"
     },
+    imageUrl:{  
+        type: String,
+        default: null
+    },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",

@@ -145,6 +145,7 @@ const deleteProduct = async (req, res) => {
   }
 };
 
+// public route
 const getAllProducts = async (req, res, next) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -233,6 +234,45 @@ const getAllProducts = async (req, res, next) => {
   }
 };
 
+const uploadProductImage = async (req, res) => {
+  try {
+    const product = await productModel.findById(req.params.id);
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        error: "Product Not found",
+      });
+    }
+
+    if (product.user.toString() !== req.user.id) {
+      return res.status(403).json({
+        success: false,
+        error: "You are not authorized to upload image for this product",
+      });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        error: "Please upload an image",
+      });
+    }
+
+    let imageUrl = `/uploads/${req.file.filename}`;
+    product.imageUrl = imageUrl;
+    await product.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Image Uploaded Successfully",
+      data: {
+        product,
+      },
+    });
+  } catch (err) {}
+};
+
 module.exports = {
   createProduct,
   getMyProducts,
@@ -240,4 +280,5 @@ module.exports = {
   updateProduct,
   deleteProduct,
   getAllProducts,
+  uploadProductImage,
 };

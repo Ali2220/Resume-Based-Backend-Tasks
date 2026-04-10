@@ -6,12 +6,14 @@ const authRoute = require("./routes/authRoute");
 const userRoute = require("./routes/userRoute")
 const productRoute = require("./routes/productRoute")
 const cookieParser = require("cookie-parser");
+const path = require('path')
 
 connectDB();
 
 // Middlewares
 app.use(express.json());
 app.use(cookieParser());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
 app.use("/api/auth", authRoute);
