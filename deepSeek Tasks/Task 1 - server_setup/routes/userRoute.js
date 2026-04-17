@@ -30,7 +30,7 @@ const deleteAccountLimiter = rateLimit({
   },
 });
 
-router.get("/", authMiddleware, adminMiddleware, getAllUsers); //saray users sirf admin get kr skta hai, or koi nhi.
+router.get("/", authMiddleware, adminMiddleware, getAllUsers); // saray users sirf admin get kr skta hai, or koi nhi.
 router.get("/:id", authMiddleware, getUserById);
 router.put("/profile", authMiddleware, updateProfile);
 router.put("/change-password", authMiddleware, passwordChangeLimiter, changePassword);
